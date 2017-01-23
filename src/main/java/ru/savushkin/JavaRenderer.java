@@ -13,22 +13,25 @@ import java.awt.event.KeyListener;
 public class JavaRenderer implements GLEventListener, KeyListener {
     private static final GLU glu = new GLU();
     private GL2 gl;
-    private float rotateLeftRight = 0.0f, rotateUpDown = 0.0f;
+    private float rotateLeftRight = 0.0f, rotateUpDown = 0.0f, scale = 0.0125f;
     private boolean rotate = false;
+    private String objFileName, mtlFileName;
 
-    private GLModel model = null;
+    private GLModel car = null;
 
     public void display(GLAutoDrawable gLDrawable) {
         this.gl.glLoadIdentity();
         this.gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
 
-        this.gl.glTranslatef(0, 0, -20);
-        this.gl.glScalef(0.1f, 0.1f, 0.1f);
+        this.gl.glTranslatef(0, 0, -50);
+        this.gl.glScalef(scale, scale, scale);
         this.gl.glRotatef(rotateUpDown, 1.0f, 0.0f, 0.0f);
 //        this.gl.glRotatef(rotateLeftRight, 0.0f, 0.0f, 1.0f);
         this.gl.glRotatef(rotateLeftRight, 0.0f, 1.0f, 0.0f);
 
-        model.opengldraw(this.gl);
+//        glu.gluLookAt(400, 400, 400, 0, 0, 0, 0, 100, 0);
+
+        car.opengldraw(this.gl);
 
         this.gl.glFlush();
         if (rotate) {
@@ -49,8 +52,6 @@ public class JavaRenderer implements GLEventListener, KeyListener {
         this.gl.glLoadIdentity();
         this.gl.glMatrixMode(GL2.GL_MODELVIEW);
         this.gl.glLoadIdentity();
-        GLU glu = new GLU();
-
         if (false == loadModels(gl)) {
             System.exit(1);
         }
@@ -69,8 +70,10 @@ public class JavaRenderer implements GLEventListener, KeyListener {
         float h = (float)width / (float)height;
         gl.glMatrixMode(GL2.GL_PROJECTION);
         gl.glLoadIdentity();
-        glu.gluPerspective(100, h, 0.1, 100);
+        glu.gluPerspective(90, h, 0.1, 100);
         gl.glMatrixMode(GL2.GL_MODELVIEW);
+//        gl.glLoadIdentity();
+//        glu.gluLookAt(300, 300, 300, 0, 0, 0, 0, 100, 0);
     }
 
     public void dispose(GLAutoDrawable arg0) {
@@ -78,9 +81,8 @@ public class JavaRenderer implements GLEventListener, KeyListener {
     }
 
     private Boolean loadModels(GL2 gl) {
-        model = ModelLoaderOBJ.LoadModel("./model/e30/e30.obj",
-                "./model/e30/e30.mtl", gl);
-        if (model == null) {
+        car = ModelLoaderOBJ.LoadModel(objFileName, mtlFileName, gl);
+        if (car == null) {
             return false;
         }
         return true;
@@ -93,11 +95,11 @@ public class JavaRenderer implements GLEventListener, KeyListener {
         float[] lightColorAmbient = { 0.02f, 0.02f, 0.02f, 1f };
         float[] lightColorSpecular = { 0.9f, 0.9f, 0.9f, 1f };
         // Set light parameters.
-        gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_POSITION, lightPos, 0);
-        gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_AMBIENT, lightColorAmbient, 0);
-        gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_SPECULAR, lightColorSpecular, 0);
-        gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_DIFFUSE, lightColorSpecular, 0);
-        gl.glEnable(GL2.GL_LIGHT1);
+        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, lightPos, 0);
+        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, lightColorAmbient, 0);
+        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_SPECULAR, lightColorSpecular, 0);
+        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, lightColorSpecular, 0);
+        gl.glEnable(GL2.GL_LIGHT0);
     }
 
     @Override
@@ -124,6 +126,13 @@ public class JavaRenderer implements GLEventListener, KeyListener {
                 break;
             case KeyEvent.VK_R:
                 rotate = !rotate;
+                break;
+            case KeyEvent.VK_0:
+                if(scale > 0)
+                scale -= 0.001;
+                break;
+            case KeyEvent.VK_9:
+                scale += 0.001;
                 break;
         }
     }

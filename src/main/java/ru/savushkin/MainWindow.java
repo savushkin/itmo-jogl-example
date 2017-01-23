@@ -2,24 +2,20 @@ package ru.savushkin;
 
 import com.jogamp.opengl.awt.GLCanvas;
 
-import java.awt.Frame;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class MainWindow implements Runnable, KeyListener {
+public class MainWindow implements Runnable {
     private static Thread displayT = new Thread(new MainWindow());
     private static boolean bQuit = false;
-
-
 
     public static void main(String[] args) {
         displayT.start();
     }
 
     public void run() {
-        Frame frame = new Frame("BMV e30");
+        Frame frame = new Frame("BMV E30");
         GLCanvas canvas = new GLCanvas();
         int size = frame.getExtendedState();
 
@@ -45,15 +41,5 @@ public class MainWindow implements Runnable, KeyListener {
         while( !bQuit ) {
             canvas.display();
         }
-    }
-
-    public void keyPressed(KeyEvent e) {
-
-    }
-
-    public void keyReleased(KeyEvent e) {
-    }
-
-    public void keyTyped(KeyEvent e) {
     }
 }

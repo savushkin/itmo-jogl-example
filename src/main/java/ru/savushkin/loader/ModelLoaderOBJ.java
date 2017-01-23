@@ -7,15 +7,6 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
 
-/**
- * Image loading class that converts BufferedImages into a data structure that
- * can be easily passed to OpenGL.
- * 
- * @author Pepijn Van Eeckhoudt Downloaded from:
- *         http://www.felixgers.de/teaching/jogl/
- */
-
-// Uses the class GLModel from JautOGL to load and display obj files.
 public class ModelLoaderOBJ {
 	
 	public static GLModel LoadModel(String objPath, String mtlPath, GL2 gl)
